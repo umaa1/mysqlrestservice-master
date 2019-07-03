@@ -15,6 +15,8 @@ import java.util.List;
 public class MainController {
     @Autowired
     private PizzaRepository pizzaRepository;
+    @Autowired
+    private CartRepository cartRepository;
     private static final String SUCCESS= "Saved";
     /*
     * READ Operation
@@ -24,6 +26,21 @@ public class MainController {
     @GetMapping(path="/all")
     public @ResponseBody Iterable<PizzaDetails> getPizzaDetails() {
         return pizzaRepository.findAll();
+    }
+
+    @GetMapping(path="/allCartData")
+    public @ResponseBody Iterable<CartDetails> getCartDetails() {
+        return cartRepository.findAll();
+    }
+
+    @GetMapping(path="/addCartDetails")
+    public @ResponseBody String addCartDetails(@RequestParam String descripton, @RequestParam String title, @RequestParam int quantity) {
+        CartDetails cartDetails = new CartDetails();
+        cartDetails.setDescription(descripton);
+        cartDetails.setQuantity(quantity);
+        cartDetails.setTitle(title);
+        cartRepository.save(cartDetails);
+        return "Successfully Added to Cart";
     }
 
     /*
